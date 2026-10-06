@@ -1,0 +1,32 @@
+# Node modules
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
+
+# Python Virtual Environment
+backend/venv/
+backend/env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables
+.env
+*.env
+backend/.env
+
+# Local Database
+backend/touchgrass.db
+*.sqlite3
+*.db
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs/
+*.log

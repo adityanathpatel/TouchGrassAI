@@ -1,0 +1,26 @@
+# TouchGrass AI - Project Requirements
+
+## Core Stack
+- **Frontend Framework**: React 19, Vite, React Router
+- **Backend Framework**: FastAPI (Python 3.9+)
+- **Database**: SQLite (via SQLAlchemy)
+
+## External / API Requirements
+1. **Database**
+   - No external database API required.
+   - The project uses a local SQLite database file (`touchgrass.db`) which is created automatically by the backend.
+
+2. **AI Provider (Ollama API)**
+   - **Service**: Local Ollama Instance
+   - **Default Model**: llama3 (or gemma, qwen)
+   - **URL**: `http://localhost:11434`
+   - **Usage**: Used for generating the personalized adventure details, missions, and post-adventure journals.
+   - *Note*: If Ollama is not available, the system can fallback to a "mock" AI provider (configurable in `backend/config.py`).
+
+3. **Map & Routing APIs**
+   - **Routing**: OSRM (Open Source Routing Machine) using public endpoints or local instance (used in `route_generator.py`).
+   - **Map Tiles**: OpenStreetMap (used in the frontend via Leaflet).
+
+## Environment Setup
+- **Python Dependencies**: Listed in `backend/requirements.txt` (FastAPI, uvicorn, pydantic, sqlalchemy, httpx, etc.)
+- **Node Dependencies**: Listed in `frontend/package.json` (Leaflet, localforage, lucide-react, etc.)
