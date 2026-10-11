@@ -74,70 +74,217 @@ Instead of an addictive chatbot or SaaS dashboard, TouchGrass AI is a tactile, p
 
 ---
 
-## 💻 Quickstart & Local Setup
+## 💻 Complete Step-by-Step Local Setup & Execution Guide
 
-### 1. Clone & Configure
+Follow these steps to run TouchGrass AI locally on your system from cloning to full execution.
+
+### 📋 Prerequisites
+
+Ensure you have the following installed on your machine:
+- **Git**: [Download Git](https://git-scm.com/)
+- **Python**: Version `3.10` to `3.14` — [Download Python](https://www.python.org/downloads/)
+- **Node.js**: Version `18.x` or higher (includes `npm`) — [Download Node.js](https://nodejs.org/)
+- *(Optional)* **Ollama**: For running open-weight models locally — [Download Ollama](https://ollama.com/)
+
+---
+
+### 🔹 Step 1: Clone the Repository
+
+Open your terminal (PowerShell, Command Prompt, or Terminal on macOS/Linux) and clone the project:
+
 ```bash
 git clone https://github.com/adityanathpatel/TouchGrassAI.git
 cd TouchGrassAI
+```
+
+---
+
+### 🔹 Step 2: Configure Environment Variables
+
+Create your local `.env` configuration file from the provided template:
+
+**Windows (PowerShell):**
+```powershell
+Copy-Item .env.example .env
+```
+
+**macOS / Linux / Git Bash:**
+```bash
 cp .env.example .env
 ```
 
-### 2. Backend (FastAPI)
+> 💡 **Default `.env` Settings**: The template is pre-configured for local execution with zero cloud dependencies:
+> - `AI_PROVIDER=ollama` (uses local Ollama with automatic zero-dependency fallback)
+> - `MODEL_NAME=gemma2:2b` (Google DeepMind Gemma 2 2B)
+> - `VISION_MODEL_NAME=moondream` (edge vision model)
+> - `ROUTING_PROVIDER=osrm` (public OpenStreetMap walking routes)
+> - `LOCAL_ONLY=true` (strict local privacy mode)
+> - `DATABASE_URL=sqlite:///./touchgrass.db` (local SQLite database)
+
+---
+
+### 🔹 Step 3: Set Up & Run Backend (FastAPI)
+
+In your first terminal, navigate to the `backend` directory and set up Python:
+
 ```bash
 cd backend
+```
+
+#### 1. Create a Python Virtual Environment
+```bash
 python -m venv .venv
+```
 
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux: source .venv/bin/activate
+#### 2. Activate the Virtual Environment
 
+- **Windows (PowerShell):**
+  ```powershell
+  .venv\Scripts\Activate.ps1
+  ```
+  *(If you get a script execution policy restriction, run: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first).*
+
+- **Windows (Command Prompt / CMD):**
+  ```cmd
+  .venv\Scripts\activate.bat
+  ```
+
+- **macOS / Linux:**
+  ```bash
+  source .venv/bin/activate
+  ```
+
+#### 3. Install Backend Dependencies
+```bash
 pip install -r requirements.txt
+```
+
+#### 4. Run Automated Backend Tests (Optional, Recommended)
+```bash
 pytest
+```
+*(All 22 test suites should pass with 100% success).*
+
+#### 5. Start the FastAPI Server
+```bash
 uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
-> API runs at: `http://127.0.0.1:8000` (Interactive docs at `/docs`)
 
-### 3. Frontend (React + Vite)
-In a second terminal window:
+> ✅ **Backend is now LIVE at:** `http://127.0.0.1:8000`  
+> 📖 **Interactive Swagger API Docs:** `http://127.0.0.1:8000/docs`  
+> 🩺 **Health Check:** `http://127.0.0.1:8000/api/health`
+
+---
+
+### 🔹 Step 4: Set Up & Run Frontend (React + Vite)
+
+Open a **second terminal window**, navigate to the project directory, and enter the `frontend` folder:
+
 ```bash
-cd frontend
+cd TouchGrassAI/frontend
+```
+
+#### 1. Install Node Dependencies
+```bash
 npm install
+```
+
+#### 2. Start the Vite Development Server
+```bash
 npm run dev
 ```
-> Web application runs at: `http://localhost:5173/`
 
-### 4. Local AI (Optional - Ollama)
-```bash
-ollama pull gemma2:2b
-ollama pull moondream
-ollama serve
+> 🌐 **TouchGrass AI Web App is now LIVE at:** `http://localhost:5173/`
+
+Open your browser and navigate to **[http://localhost:5173/](http://localhost:5173/)**.
+
+---
+
+### 🔹 Step 5: (Optional) Local Open-Weight AI Setup with Ollama
+
+TouchGrass AI works completely without Ollama thanks to its built-in deterministic fallback engine. To enable live inference with local models:
+
+1. Download and install **[Ollama](https://ollama.com/)**.
+2. Open a terminal and pull the lightweight models:
+   ```bash
+   # Lightweight text model (Google DeepMind Gemma 2 2B)
+   ollama pull gemma2:2b
+
+   # Edge vision-language model for wildlife/plant identification
+   ollama pull moondream
+   ```
+3. Ensure the Ollama daemon is running:
+   ```bash
+   ollama serve
+   ```
+4. TouchGrass AI automatically detects the running Ollama instance at `http://127.0.0.1:11434`.
+
+---
+
+## 🧭 How the Application Works (End-to-End Walkthrough)
+
+Once both servers are running, here is how the complete adventure lifecycle operates:
+
 ```
-*(If Ollama is not running, TouchGrass AI automatically engages its built-in zero-dependency deterministic fallback engine).*
+[ 1. Plan Adventure ]  -->  [ 2. Route & Offline Pack ]  -->  [ 3. Outdoor Mode ]  -->  [ 4. Record Field Notes ]  -->  [ 5. AI Scrapbook Journal ]
+```
+
+1. **Plan Adventure**:
+   - Open `http://localhost:5173/`.
+   - Click **"Create Adventure"** (or click **"Try 60-Minute Nature Hunt"** for an instant demo).
+   - Enter your target walk duration (15–120 min), fitness level, and interests (e.g., bird watching, photography).
+   - Open-weight AI generates sensory missions (e.g., *"Find moss on tree bark"*, *"Listen for coastal birds"*) and safety checklists.
+2. **Deterministic Route Preview & Offline Caching**:
+   - The app queries OpenStreetMap & OSRM to calculate a real walking loop.
+   - Click **"Download Adventure Pack (Go Offline)"**. The route geometry, missions, waypoints, and observation schemas are saved into device **IndexedDB**.
+3. **Pocket-First Outdoor Walk**:
+   - Click **"Start Outdoor Mode"**.
+   - The UI transforms into an ultra-minimal, high-contrast screen showing only an elapsed timer and your active mission.
+   - Put your phone in your pocket and explore the real world!
+4. **Log Field Observations**:
+   - Spot something interesting? Tap **"Add Observation"**.
+   - Use the **Field Camera** (`/camera`) with rule-of-thirds grid to take photos.
+   - Tap **"Voice Note"** to dictate notes using real-time in-browser speech recognition.
+   - All photos and recordings are saved locally on-device.
+5. **Finish Walk & Generate AI Journal**:
+   - Tap **"Finish Adventure"** and enter your personal reflections.
+   - Click **"Generate AI Journal"**.
+   - Local AI synthesizes your route, completed missions, photos, and voice notes into a **vintage digital scrapbook** complete with polaroids, field narrative, and a 1-click **"Export as Markdown"** button.
 
 ---
 
-## ⏱️ 60-Second Hackathon Live Demo
+## 🛠️ Troubleshooting & FAQ
 
-1. Open `http://localhost:5173/` and click **"Try 60-Minute Nature Hunt"**.
-2. Review the Golden Gate Park route and click **"Download Adventure Pack (Go Offline)"**.
-3. Tap **"Start Outdoor Mode"** to experience the pocket-first interface.
-4. Tap **"Add Observation"** -> take a photo or record a voice note.
-5. Tap **"Finish Adventure"** -> **"Generate AI Journal"** to view the vintage digital scrapbook and export to Markdown!
-
----
-
-## 🧪 Testing & Quality Assurance
-
-- **Backend Pytest Suite**: `pytest -v` (22/22 tests passing, 100%)
-- **Frontend Type Safety**: `npx tsc --noEmit` (0 errors)
-- **Production Build**: `npm run build` (Clean compile in ~4.5s)
+| Problem | Cause | Solution |
+| :--- | :--- | :--- |
+| **PowerShell script execution error** | Windows restricts unsigned scripts | Run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` in PowerShell before activating `.venv`. |
+| **`Port 8000 already in use`** | Another process is using port 8000 | Stop the existing process or pass `--port 8001` to uvicorn (and update `frontend/vite.config.ts` proxy). |
+| **`Port 5173 already in use`** | Another Vite process is running | Vite will automatically pick port 5174; navigate to that port in your browser. |
+| **Microphone / Camera not activating** | Browser permissions blocked | Ensure you grant camera and microphone permissions to `http://localhost:5173/` in your browser address bar. |
+| **AI shows "Offline / fallback active"** | Ollama is not installed or running | TouchGrass AI automatically uses its built-in deterministic fallback engine. To use local AI, run `ollama serve`. |
 
 ---
 
-## 📚 Grounding & References
+## 🧪 Testing & Verification Commands
 
-- **Nature & Cognitive Health**: *Bratman et al. (2019), Science Advances* (DOI: 10.1126/sciadv.aax0903)
+```bash
+# Backend pytest suite (22/22 tests passing)
+cd backend
+pytest -v
+
+# Frontend TypeScript verification (0 errors)
+cd ../frontend
+npx tsc --noEmit
+
+# Frontend production bundle compilation (clean build)
+npm run build
+```
+
+---
+
+## 📚 Grounding & Academic References
+
+- **Nature & Mental Health**: *Bratman et al. (2019), Science Advances* (DOI: 10.1126/sciadv.aax0903)
 - **Attention Restoration Theory**: *Kaplan & Kaplan (1989), Cambridge University Press*
 - **Open-Weight Edge AI**: *Google DeepMind Gemma 2 (2024)* & *OpenAI Whisper (2022)*
 - **Deterministic Routing**: *OpenStreetMap & Project OSRM (2024)*
@@ -146,4 +293,4 @@ ollama serve
 
 ## 📄 License
 
-MIT License © 2026 TouchGrass AI Contributors.
+MIT License © 2026 TouchGrass AI Contributors. Built for the open-source community to help people reconnect with the real world.
