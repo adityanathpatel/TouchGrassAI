@@ -1,0 +1,12 @@
+{
+  "name": "TouchGrass AI",
+  "short_name": "TouchGrass",
+  "description": "Plan less. Explore more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f4efe4",
+  "theme_color": "#2f5d3a",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
